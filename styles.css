@@ -11,15 +11,11 @@ header {
     align-items: center;
     justify-content: center;
     gap: 10px;
+    width: 310px;
     padding: 25px;
     background-color: rgb(125, 175, 158);
 }
-.markers {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 25px;
-}
+
 .game-board {
     display: grid;
     grid-template-columns: repeat(3, 100px);
@@ -27,6 +23,7 @@ header {
     background-color: rgb(217, 191, 140);
     border: 5px solid black;
 }
+
 .game-cell {
     display: flex;
     align-items: center;
@@ -37,13 +34,13 @@ header {
 }
 
 .o-img {
-    width: 80px;
-    height: 80px;
-    display: none;
+    background-image: url(./images/circle-outline.svg);
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .x-img {
-    width: 70px;
-    height: 70px;
-    display: none;
+    background-image: url(./images/x-symbol-svgrepo-com.svg);
+    background-position: center;
+    background-repeat: no-repeat;
 }

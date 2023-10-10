@@ -1,18 +1,57 @@
-//listen for X or O button - have something pop up for their name (modal?)
-//add logic requiring name and then capitalize it
-//have text that say's 'it's ${player1}'s turn' for the X and player2 is O
-//listen for click in cell (make sure it's empty)
-//change display-none to display-block for X or O class based on which button is clicked
-//this pushes into an array?
-//add in logic for what patterns win and then check the array for those patterns? - I saw this in some other projects
+//start button to start game, X goes first
+//it will say "X's - it's your turn" 
+
+//write score checker
+
+//what needs to be in which object?
+//why would the Players need an object?
 
 
 
-const gameBoard = (() => {
-    //listen for click in a cell
-    const cells = document.querySelectorAll('.game-cell');
-    cells.forEach(cell => {
-        cell.addEventListener('click', addMark);
+const game = (() => {
+    const gameCell = document.querySelectorAll('.game-cell');
+
+    const gameArray = [
+        [null, null, null], 
+        [null, null, null], 
+        [null, null, null]
+    ];
+
+    let currentPlayer = 'X';
+
+    const gamePlay = function(event) {   
+        //update the array to signify which player has played which cell  
+        if (gameArray[event.target.id[0]][event.target.id[1]] !== null) {
+            return
+        }
+        else if(gameArray[event.target.id[0]][event.target.id[1]] === null) {
+            gameArray[event.target.id[0]][event.target.id[1]] = (currentPlayer);
+        }
+        console.log(gameArray);
+
+        //draw the X or O in the cell based on who's turn it is
+        if (currentPlayer === 'X') {
+            event.target.classList.add('x-img');
+        } else {
+            event.target.classList.add('o-img');
+        }
+
+        //check array for winning configuration
+
+        //switch which player is the current player 
+        console.log(currentPlayer)
+        if(currentPlayer === 'X') {
+            currentPlayer = 'O';
+        } else if (currentPlayer === 'O') {
+            currentPlayer = 'X';
+        }
+
+    };
+
+    //listen to clicks on each game cell
+    gameCell.forEach(cell => {
+        cell.addEventListener('click', gamePlay);
     })
-    
+
 })();
+
