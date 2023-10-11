@@ -16,6 +16,15 @@ header {
     background-color: rgb(125, 175, 158);
 }
 
+.mid-text {
+    font-size: 1.25rem;
+}
+
+.bottom-text {
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
 .game-board {
     display: grid;
     grid-template-columns: repeat(3, 100px);
