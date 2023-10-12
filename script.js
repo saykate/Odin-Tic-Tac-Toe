@@ -1,10 +1,6 @@
-//can I put each 'function' inside the gamePlay into an actual function and still 
-// access the event? I couldn't just basically, but maybe adding a Return?
-
-//write score checker
-
-//what needs to be in which object?
 //why would the Players need an object?
+//create Players per the project instructions
+
 const gameBoard = (() => {
     const gameCell = document.querySelectorAll('.game-cell');
 
@@ -14,24 +10,44 @@ const gameBoard = (() => {
         [null, null, null]
     ];
 
-    const xWinner = function() {
-        if((gameArray[0][0] && gameArray[0][1] && gameArray[0][2] === X) ||
-           (gameArray[1][0] && gameArray[1][1] && gameArray[1][2] === X) ||
-           (gameArray[2][0] && gameArray[2][1] && gameArray[2][2] === X) || 
-           (gameArray[0][0] && gameArray[1][0] && gameArray[2][0] === X) || 
-           (gameArray[0][1] && gameArray[1][1] && gameArray[2][1] === X) || 
-           (gameArray[0][2] && gameArray[1][2] && gameArray[2][2] === X) || 
-           (gameArray[0][0] && gameArray[1][1] && gameArray[2][2] === X) || 
-           (gameArray[0][2] && gameArray[1][1] && gameArray[2][0] === X)) {
-                alert("X's for the WIN!!!")
-           } else {
+    let currentPlayer = 'X';
+
+      //draw the X or O in the cell based on who's turn it is 
+    const draw = (cell, player) => { 
+        console.log('draw started') 
+
+        if (player === 'X') {
+        cell.classList.add('x-img');
+    } else {
+        cell.classList.add('o-img');
+    }}
+
+         //switch which player is the current player 
+    const togglePlayer = () => {    
+         if(currentPlayer === 'X') {
+             currentPlayer = 'O';
+         } else if (currentPlayer === 'O') {
+             currentPlayer = 'X';
+    }       console.log("player switched") }
+
+    const checkWinner = function() {
+        console.log("winner check started")
+        if((gameArray[0][0] === currentPlayer && gameArray[0][1] === currentPlayer && gameArray[0][2] === currentPlayer) ||
+            (gameArray[1][0] === currentPlayer && gameArray[1][1] === currentPlayer && gameArray[1][2] === currentPlayer) ||
+            (gameArray[2][0] === currentPlayer && gameArray[2][1] === currentPlayer && gameArray[2][2] === currentPlayer) || 
+            (gameArray[0][0] === currentPlayer && gameArray[1][0] === currentPlayer && gameArray[2][0] === currentPlayer) || 
+            (gameArray[0][1] === currentPlayer && gameArray[1][1] === currentPlayer && gameArray[2][1] === currentPlayer) || 
+            (gameArray[0][2] === currentPlayer && gameArray[1][2] === currentPlayer && gameArray[2][2] === currentPlayer) || 
+            (gameArray[0][0] === currentPlayer && gameArray[1][1] === currentPlayer && gameArray[2][2] === currentPlayer) || 
+            (gameArray[0][2] === currentPlayer && gameArray[1][1] === currentPlayer && gameArray[2][0] === currentPlayer)) {
+                alert(`${currentPlayer}'s for the WIN!!!`);
+            } else {
             return
         }
     }
 
-    let currentPlayer = 'X';
-
-    const playGame = function(event) {   
+    const playGame = function(event) {  
+        console.log('game play started') 
         //update the array to signify which player has played which cell  
         if (gameArray[event.target.id[0]][event.target.id[1]] !== null) {
             return
@@ -39,24 +55,14 @@ const gameBoard = (() => {
         else if(gameArray[event.target.id[0]][event.target.id[1]] === null) {
             gameArray[event.target.id[0]][event.target.id[1]] = (currentPlayer);
         }
-        console.log(gameArray);
 
-        //draw the X or O in the cell based on who's turn it is 
-        if (currentPlayer === 'X') {
-            event.target.classList.add('x-img');
-        } else {
-            event.target.classList.add('o-img');
-        }
+       draw(event.target, currentPlayer);
 
-        //check array for winning configuration
+       setTimeout(checkWinner, 1); 
+        // checkWinner();
 
-        //switch which player is the current player 
-        console.log(currentPlayer)
-        if(currentPlayer === 'X') {
-            currentPlayer = 'O';
-        } else if (currentPlayer === 'O') {
-            currentPlayer = 'X';
-        }
+       togglePlayer();
+
     };
 
        //listen to clicks on each game cell
