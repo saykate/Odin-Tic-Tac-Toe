@@ -13,9 +13,24 @@
     <div class="game-container">
         <header>
             <h1>Tic Tac Toe</h1>
-            <p class="mid-text">X's vs. O's</p>
-            <p class="bottom-text">Start the game: X's go first</p>
+            <p class="game-text">X's vs. O'x</p>
+            <button class="start-button">Start!</button>
         </header>
+        <section class="hidden x-modal">
+            <h2>X's - please enter your First Name:</h2>
+            <input type="text" name="x-name-modal" id="x-name-modal" placeholder="First Name">
+            <button class="submit x-submit">Let's Play!</button>
+        </section>
+        <section class="hidden o-modal">
+            <h2>O's - please enter your First Name:</h2>
+            <input type="text" name="o-name-modal" id="o-name-modal" placeholder="First Name">
+            <button class="submit o-submit">Let's Play!</button>
+        </section>
+        <section class="hidden win-modal">
+            <h2 class="winner-text"></h2>
+            <button class="restart-button">Play Again</button>
+        </section>
+        <div class="overlay hidden"></div>
         <main class="game-board">
             <div class="game-cell" id="00"></div>
             <div class="game-cell" id="01"></div>
