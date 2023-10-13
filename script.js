@@ -11,7 +11,7 @@ const playerInfo = (() => {
   const startButton = document.querySelector(".start-button");
   const submits = document.querySelectorAll(".submit");
 
-  const openModal = function (event) {
+  const openModal = function () {
     xModal.classList.remove("hidden");
     overlay.classList.remove("hidden");
   };
