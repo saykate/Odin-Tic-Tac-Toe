@@ -84,6 +84,7 @@ const gameBoard = () => {
 
   const checkWinner = function () {
     console.log("winner check started");
+    console.log({ currentPlayer });
     if (
       (gameArray[0][0] === currentPlayer &&
         gameArray[0][1] === currentPlayer &&
