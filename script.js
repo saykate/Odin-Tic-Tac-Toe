@@ -1,5 +1,4 @@
 //why would the Players need an object?
-//add a check for the Tie
 
 let playerX = "";
 let playerO = "";
@@ -74,7 +73,8 @@ const gameBoard = () => {
 
   const checkWinner = function () {
     console.log("winner check started");
-    // let isTie = true;
+    console.log({currentPlayer});
+    console.log(gameArray)
 
     if (
       (gameArray[0][0] === currentPlayer &&
@@ -107,27 +107,30 @@ const gameBoard = () => {
       } is the WINNER!!!`;
       winModal.classList.remove("hidden");
       overlay.classList.remove("hidden");
-    } else {
-      return;
-    }
-
-    // for (let i = 0; i < gameArray.length; i++) {
-    //   for (let j = 0; j < gameArray.length; j++) {
-    //     if (gameArray[i][j] === null) {
-    //       isTie = false;
-    //       break;
-    //     }
-    //   }
-    //   if (!isTie) {
-    //     break;
-    //   }
-    // }
-    // if (isTie) {
-    //   winnerText.textContent = "No one wins. It's a tie. Everyone loses.";
-    //   winModal.classList.remove("hidden");
-    //   overlay.classList.remove("hidden");
-    // }
+      
+    } 
   };
+
+  const checkTie = () => {
+    console.log("tie check started");
+
+    let isTie = false;
+    for (let i = 0; i < gameArray.length; i++) {
+      for (let j = 0; j < gameArray.length; j++) {
+        if (gameArray[i][j] === null) {
+          isTie = false;
+          break;
+        } else if (gameArray[i][j] !== null) {
+          isTie = true
+      }
+    }
+  };
+  if (isTie) {
+    winnerText.textContent = "No one wins. It's a tie. Everyone loses.";
+    winModal.classList.remove("hidden");
+    overlay.classList.remove("hidden");
+  }
+}
 
   //switch which player is the current player
   const togglePlayer = () => {
@@ -141,7 +144,7 @@ const gameBoard = () => {
 
   const playGame = function (event) {
     console.log("game play started");
-    console.log(event)
+    console.log(event);
     //update the array to signify which player has played which cell
     if (gameArray[event.target.id[0]][event.target.id[1]] !== null) {
       return;
@@ -152,6 +155,8 @@ const gameBoard = () => {
     draw(event.target, currentPlayer);
 
     checkWinner();
+
+    checkTie();
 
     togglePlayer();
   };
@@ -170,8 +175,8 @@ const restartGame = function () {
     cell.classList.remove("o-img");
   });
   gameArray = [];
-  currentPlayer = '';
-  gameBoard()
+  currentPlayer = "";
+  gameBoard();
 };
 
 restart.addEventListener("click", restartGame);
