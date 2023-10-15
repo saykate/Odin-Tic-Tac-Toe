@@ -1,11 +1,16 @@
-//why would the Players need an object?
-
 let playerX = "";
 let playerO = "";
 const overlay = document.querySelector(".overlay");
 const winModal = document.querySelector(".win-modal");
 const gameCell = document.querySelectorAll(".game-cell");
 const restart = document.querySelector(".restart-button");
+
+let gameArray = [
+  [null, null, null],
+  [null, null, null],
+  [null, null, null],
+];
+let currentPlayer = "X";
 
 const playerInfo = (() => {
   const xModal = document.querySelector(".x-modal");
@@ -39,7 +44,6 @@ const playerInfo = (() => {
 
       oModal.classList.add("hidden");
       overlay.classList.add("hidden");
-      gameBoard();
     }
   };
 
@@ -49,21 +53,11 @@ const playerInfo = (() => {
   });
 })();
 
-const gameBoard = () => {
+const gameBoard = (() => {
   const winnerText = document.querySelector(".winner-text");
-
-  let gameArray = [
-    [null, null, null],
-    [null, null, null],
-    [null, null, null],
-  ];
-
-  let currentPlayer = "X";
 
   //draw the X or O in the cell based on who's turn it is
   const draw = (cell, player) => {
-    console.log("draw started");
-
     if (player === "X") {
       cell.classList.add("x-img");
     } else {
@@ -71,11 +65,7 @@ const gameBoard = () => {
     }
   };
 
-  const checkWinner = function () {
-    console.log("winner check started");
-    console.log({currentPlayer});
-    console.log(gameArray)
-
+  const checkWinner = function () {    
     if (
       (gameArray[0][0] === currentPlayer &&
         gameArray[0][1] === currentPlayer &&
@@ -107,30 +97,25 @@ const gameBoard = () => {
       } is the WINNER!!!`;
       winModal.classList.remove("hidden");
       overlay.classList.remove("hidden");
-      
-    } 
+    }
   };
 
   const checkTie = () => {
-    console.log("tie check started");
-
-    let isTie = false;
+    let isTie = true;
     for (let i = 0; i < gameArray.length; i++) {
       for (let j = 0; j < gameArray.length; j++) {
         if (gameArray[i][j] === null) {
           isTie = false;
           break;
-        } else if (gameArray[i][j] !== null) {
-          isTie = true
+        } 
       }
     }
+    if (isTie) {
+      winnerText.textContent = "No one wins. It's a tie. Everyone loses.";
+      winModal.classList.remove("hidden");
+      overlay.classList.remove("hidden");
+    }
   };
-  if (isTie) {
-    winnerText.textContent = "No one wins. It's a tie. Everyone loses.";
-    winModal.classList.remove("hidden");
-    overlay.classList.remove("hidden");
-  }
-}
 
   //switch which player is the current player
   const togglePlayer = () => {
@@ -139,33 +124,41 @@ const gameBoard = () => {
     } else if (currentPlayer === "O") {
       currentPlayer = "X";
     }
-    console.log("player switched");
+    // currentPlayer = 'X' ? 'O' : 'X';
   };
 
-  const playGame = function (event) {
-    console.log("game play started");
-    console.log(event);
-    //update the array to signify which player has played which cell
-    if (gameArray[event.target.id[0]][event.target.id[1]] !== null) {
-      return;
-    } else if (gameArray[event.target.id[0]][event.target.id[1]] === null) {
-      gameArray[event.target.id[0]][event.target.id[1]] = currentPlayer;
-    }
-
-    draw(event.target, currentPlayer);
-
-    checkWinner();
-
-    checkTie();
-
-    togglePlayer();
+  return {
+    draw,
+    checkWinner,
+    checkTie,
+    togglePlayer,
   };
 
-  //listen to clicks on each game cell
-  gameCell.forEach((cell) => {
-    cell.addEventListener("click", playGame);
-  });
+})();
+
+const playGame = function (event) {
+  console.log("game play started");
+
+  //update the array to signify which player has played which cell
+  if (gameArray[event.target.id[0]][event.target.id[1]] !== null) {
+    return;
+  } else if (gameArray[event.target.id[0]][event.target.id[1]] === null) {
+    gameArray[event.target.id[0]][event.target.id[1]] = currentPlayer;
+  }
+
+  gameBoard.draw(event.target, currentPlayer);
+ 
+  gameBoard.checkTie();
+
+  gameBoard.checkWinner();
+
+  gameBoard.togglePlayer();
 };
+
+//listen to clicks on each game cell
+gameCell.forEach((cell) => {
+  cell.addEventListener("click", playGame);
+});
 
 const restartGame = function () {
   winModal.classList.add("hidden");
@@ -174,9 +167,12 @@ const restartGame = function () {
     cell.classList.remove("x-img");
     cell.classList.remove("o-img");
   });
-  gameArray = [];
-  currentPlayer = "";
-  gameBoard();
+  gameArray = [
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+  ];
+  currentPlayer = "X";
 };
 
 restart.addEventListener("click", restartGame);
