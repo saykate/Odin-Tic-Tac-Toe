@@ -67,6 +67,8 @@ const gameBoard = (() => {
   };
 
   const checkWinner = function () {    
+    console.log(gameArray);
+
     if (
       (gameArray[0][0] === currentPlayer &&
         gameArray[0][1] === currentPlayer &&
@@ -123,7 +125,7 @@ const gameBoard = (() => {
     } else if (currentPlayer === "O") {
       currentPlayer = "X";
     }
-    // currentPlayer = 'X' ? 'O' : 'X';
+    // currentPlayer === 'X' ? 'O' : 'X';
   };
 
   return {
@@ -136,9 +138,7 @@ const gameBoard = (() => {
 })();
 
 const playGame = function (event) {
-  console.log("game play started");
-
-  //update the array to signify which player has played which cell
+   //update the array to signify which player has played which cell
   if (gameArray[event.target.id[0]][event.target.id[1]] !== null) {
     return;
   } else if (gameArray[event.target.id[0]][event.target.id[1]] === null) {
