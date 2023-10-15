@@ -53,6 +53,7 @@ const playerInfo = (() => {
   });
 })();
 
+
 const gameBoard = (() => {
   const winnerText = document.querySelector(".winner-text");
 
@@ -92,9 +93,7 @@ const gameBoard = (() => {
         gameArray[1][1] === currentPlayer &&
         gameArray[2][0] === currentPlayer)
     ) {
-      winnerText.textContent = `${
-        currentPlayer === "X" ? playerX : playerO
-      } is the WINNER!!!`;
+      winnerText.textContent = `${currentPlayer === "X" ? playerX : playerO} is the WINNER!!!`;
       winModal.classList.remove("hidden");
       overlay.classList.remove("hidden");
     }
@@ -153,12 +152,12 @@ const playGame = function (event) {
   gameBoard.checkWinner();
 
   gameBoard.togglePlayer();
-};
-
-//listen to clicks on each game cell
-gameCell.forEach((cell) => {
-  cell.addEventListener("click", playGame);
-});
+  };
+  
+  //listen to clicks on each game cell
+  gameCell.forEach((cell) => {
+    cell.addEventListener("click", playGame);
+  });
 
 const restartGame = function () {
   winModal.classList.add("hidden");
@@ -175,4 +174,5 @@ const restartGame = function () {
   currentPlayer = "X";
 };
 
+//listen to Play again click
 restart.addEventListener("click", restartGame);
