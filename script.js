@@ -1,4 +1,6 @@
 //why would the Players need an object?
+//I clearly didn't use modules the way this project intended and I think it's causing bugggggs
+
 
 let playerX = "";
 let playerO = "";
@@ -49,6 +51,9 @@ const playerInfo = (() => {
   });
 })();
 
+//If this were an IIFE, I could return functions and use them outside of
+//this, but if it were and IIFE, I couldn't control when the users can start,
+//they wouldn't have to enter a name to start...
 const gameBoard = () => {
   const winnerText = document.querySelector(".winner-text");
 
@@ -62,7 +67,6 @@ const gameBoard = () => {
 
   //draw the X or O in the cell based on who's turn it is
   const draw = (cell, player) => {
-    console.log("draw started");
 
     if (player === "X") {
       cell.classList.add("x-img");
@@ -72,8 +76,6 @@ const gameBoard = () => {
   };
 
   const checkWinner = function () {
-    console.log("winner check started");
-    console.log({currentPlayer});
     console.log(gameArray)
 
     if (
@@ -102,17 +104,13 @@ const gameBoard = () => {
         gameArray[1][1] === currentPlayer &&
         gameArray[2][0] === currentPlayer)
     ) {
-      winnerText.textContent = `${
-        currentPlayer === "X" ? playerX : playerO
-      } is the WINNER!!!`;
+      winnerText.textContent = `${currentPlayer === "X" ? playerX : playerO} is the WINNER!!!`;
       winModal.classList.remove("hidden");
       overlay.classList.remove("hidden");
-      
     } 
   };
 
   const checkTie = () => {
-    console.log("tie check started");
 
     let isTie = false;
     for (let i = 0; i < gameArray.length; i++) {
@@ -134,17 +132,12 @@ const gameBoard = () => {
 
   //switch which player is the current player
   const togglePlayer = () => {
-    if (currentPlayer === "X") {
-      currentPlayer = "O";
-    } else if (currentPlayer === "O") {
-      currentPlayer = "X";
-    }
-    console.log("player switched");
+    currentPlayer === "X" ? "O" : "X";
   };
 
   const playGame = function (event) {
     console.log("game play started");
-    console.log(event);
+  
     //update the array to signify which player has played which cell
     if (gameArray[event.target.id[0]][event.target.id[1]] !== null) {
       return;
@@ -160,7 +153,7 @@ const gameBoard = () => {
 
     togglePlayer();
   };
-
+  
   //listen to clicks on each game cell
   gameCell.forEach((cell) => {
     cell.addEventListener("click", playGame);
@@ -173,10 +166,9 @@ const restartGame = function () {
   gameCell.forEach((cell) => {
     cell.classList.remove("x-img");
     cell.classList.remove("o-img");
-  });
-  gameArray = [];
-  currentPlayer = "";
+  })
   gameBoard();
 };
 
+//listen to Play again click
 restart.addEventListener("click", restartGame);
