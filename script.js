@@ -12,7 +12,7 @@ let gameArray = [
 ];
 let currentPlayer = "X";
 
-const playerInfo = (() => {
+const playerInfo = () => {
   const xModal = document.querySelector(".x-modal");
   const oModal = document.querySelector(".o-modal");
   const startButton = document.querySelector(".start-button");
@@ -51,8 +51,9 @@ const playerInfo = (() => {
   submits.forEach((submit) => {
     submit.addEventListener("click", closeModal);
   });
-})();
 
+  return {openModal};
+};
 
 const gameBoard = (() => {
   const winnerText = document.querySelector(".winner-text");
@@ -120,12 +121,7 @@ const gameBoard = (() => {
 
   //switch which player is the current player
   const togglePlayer = () => {
-    if (currentPlayer === "X") {
-      currentPlayer = "O";
-    } else if (currentPlayer === "O") {
-      currentPlayer = "X";
-    }
-    // currentPlayer === 'X' ? 'O' : 'X';
+    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
   };
 
   return {
@@ -138,6 +134,10 @@ const gameBoard = (() => {
 })();
 
 const playGame = function (event) {
+  if(!playerX || !playerO) {
+    return playerInfo().openModal();
+    
+  }
    //update the array to signify which player has played which cell
   if (gameArray[event.target.id[0]][event.target.id[1]] !== null) {
     return;
@@ -154,6 +154,8 @@ const playGame = function (event) {
   gameBoard.togglePlayer();
   };
   
+playerInfo();
+
   //listen to clicks on each game cell
   gameCell.forEach((cell) => {
     cell.addEventListener("click", playGame);
