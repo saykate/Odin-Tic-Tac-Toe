@@ -1,13 +1,16 @@
-//why would the Players need an object?
-//I clearly didn't use modules the way this project intended and I think it's causing bugggggs
-
-
 let playerX = "";
 let playerO = "";
 const overlay = document.querySelector(".overlay");
 const winModal = document.querySelector(".win-modal");
 const gameCell = document.querySelectorAll(".game-cell");
 const restart = document.querySelector(".restart-button");
+
+let gameArray = [
+  [null, null, null],
+  [null, null, null],
+  [null, null, null],
+];
+let currentPlayer = "X";
 
 const playerInfo = (() => {
   const xModal = document.querySelector(".x-modal");
@@ -41,7 +44,6 @@ const playerInfo = (() => {
 
       oModal.classList.add("hidden");
       overlay.classList.add("hidden");
-      gameBoard();
     }
   };
 
@@ -51,23 +53,12 @@ const playerInfo = (() => {
   });
 })();
 
-//If this were an IIFE, I could return functions and use them outside of
-//this, but if it were and IIFE, I couldn't control when the users can start,
-//they wouldn't have to enter a name to start...
-const gameBoard = () => {
+
+const gameBoard = (() => {
   const winnerText = document.querySelector(".winner-text");
-
-  let gameArray = [
-    [null, null, null],
-    [null, null, null],
-    [null, null, null],
-  ];
-
-  let currentPlayer = "X";
 
   //draw the X or O in the cell based on who's turn it is
   const draw = (cell, player) => {
-
     if (player === "X") {
       cell.classList.add("x-img");
     } else {
@@ -75,9 +66,7 @@ const gameBoard = () => {
     }
   };
 
-  const checkWinner = function () {
-    console.log(gameArray)
-
+  const checkWinner = function () {    
     if (
       (gameArray[0][0] === currentPlayer &&
         gameArray[0][1] === currentPlayer &&
@@ -107,58 +96,68 @@ const gameBoard = () => {
       winnerText.textContent = `${currentPlayer === "X" ? playerX : playerO} is the WINNER!!!`;
       winModal.classList.remove("hidden");
       overlay.classList.remove("hidden");
-    } 
+    }
   };
 
   const checkTie = () => {
-
-    let isTie = false;
+    let isTie = true;
     for (let i = 0; i < gameArray.length; i++) {
       for (let j = 0; j < gameArray.length; j++) {
         if (gameArray[i][j] === null) {
           isTie = false;
           break;
-        } else if (gameArray[i][j] !== null) {
-          isTie = true
+        } 
       }
     }
+    if (isTie) {
+      winnerText.textContent = "No one wins. It's a tie. Everyone loses.";
+      winModal.classList.remove("hidden");
+      overlay.classList.remove("hidden");
+    }
   };
-  if (isTie) {
-    winnerText.textContent = "No one wins. It's a tie. Everyone loses.";
-    winModal.classList.remove("hidden");
-    overlay.classList.remove("hidden");
-  }
-}
 
   //switch which player is the current player
   const togglePlayer = () => {
-    currentPlayer === "X" ? "O" : "X";
+    if (currentPlayer === "X") {
+      currentPlayer = "O";
+    } else if (currentPlayer === "O") {
+      currentPlayer = "X";
+    }
+    // currentPlayer = 'X' ? 'O' : 'X';
   };
 
-  const playGame = function (event) {
-    console.log("game play started");
-  
-    //update the array to signify which player has played which cell
-    if (gameArray[event.target.id[0]][event.target.id[1]] !== null) {
-      return;
-    } else if (gameArray[event.target.id[0]][event.target.id[1]] === null) {
-      gameArray[event.target.id[0]][event.target.id[1]] = currentPlayer;
-    }
+  return {
+    draw,
+    checkWinner,
+    checkTie,
+    togglePlayer,
+  };
 
-    draw(event.target, currentPlayer);
+})();
 
-    checkWinner();
+const playGame = function (event) {
+  console.log("game play started");
 
-    checkTie();
+  //update the array to signify which player has played which cell
+  if (gameArray[event.target.id[0]][event.target.id[1]] !== null) {
+    return;
+  } else if (gameArray[event.target.id[0]][event.target.id[1]] === null) {
+    gameArray[event.target.id[0]][event.target.id[1]] = currentPlayer;
+  }
 
-    togglePlayer();
+  gameBoard.draw(event.target, currentPlayer);
+ 
+  gameBoard.checkTie();
+
+  gameBoard.checkWinner();
+
+  gameBoard.togglePlayer();
   };
   
   //listen to clicks on each game cell
   gameCell.forEach((cell) => {
     cell.addEventListener("click", playGame);
   });
-};
 
 const restartGame = function () {
   winModal.classList.add("hidden");
@@ -166,8 +165,13 @@ const restartGame = function () {
   gameCell.forEach((cell) => {
     cell.classList.remove("x-img");
     cell.classList.remove("o-img");
-  })
-  gameBoard();
+  });
+  gameArray = [
+    [null, null, null],
+    [null, null, null],
+    [null, null, null],
+  ];
+  currentPlayer = "X";
 };
 
 //listen to Play again click
